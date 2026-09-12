@@ -421,11 +421,12 @@ bool result =
 ```
 
 La máscara utiliza:
-
+```
 x = comparar byte
 ? = ignorar byte
+```
 
-12. Ejemplo completo
+## 12. Ejemplo completo
 
 Un ejemplo combinando GetModuleInfo, MemoryRegion y Signature:
 ```cpp
