@@ -425,8 +425,55 @@ La máscara utiliza:
 x = comparar byte
 ? = ignorar byte
 ```
+## 12. DetourApply / DetourRemove
+```DetourApply()``` permite instalar un detour sobre una dirección de memoria, redirigiendo la ejecución hacia una función destino.
 
-## 12. Ejemplo completo
+```DetourRemove()``` elimina el detour previamente instalado y restaura los bytes originales.
+
+### DetourApply
+Uso general:
+```cpp
+Memory::DetourApply(
+    address,
+    destination
+);
+```
+Donde:
+
+address es la dirección donde se instalará el detour.
+destination es la dirección de la función a la que se redirigirá la ejecución.
+La función guarda los bytes originales necesarios para poder restaurarlos posteriormente.
+
+Ejemplo conceptual:
+```cpp
+auto address = Memory::FindPattern(
+    "Game.exe",
+    "\x48\x8B\x05\x00\x00\x00\x00",
+    "xxx????"
+);
+
+if (address)
+{
+    Memory::DetourApply(
+        reinterpret_cast<BYTE*>(address),
+        reinterpret_cast<void*>(&MyFunction)
+    );
+}
+```
+### DetourRemove
+Para eliminar el detour y restaurar los bytes originales:
+```cpp
+Memory::DetourRemove(address);
+```
+Ejemplo:
+```cpp
+Memory::DetourRemove(
+    reinterpret_cast<BYTE*>(address)
+);
+```
+Esto restaura los bytes que se encontraban en la dirección antes de aplicar el detour.
+
+## 13. Ejemplo
 
 Un ejemplo combinando GetModuleInfo, MemoryRegion y Signature:
 ```cpp
